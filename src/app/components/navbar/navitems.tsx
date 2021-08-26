@@ -5,7 +5,7 @@ import { useMediaQuery } from "react-responsive";
 import { SCREENS } from "../respoonsive";
 import menuStyle from "./menuStyle";
 
-const ListCotainer = styled.ul`
+const ListContainer = styled.ul`
   ${tw`
     flex
     list-none
@@ -45,7 +45,7 @@ export function NavItems() {
   if (isMobile)
     return (
       <Menu right styles={menuStyle}>
-        <ListCotainer>
+        <ListContainer>
           <NavItem menu>
             <a href="#">Home</a>
           </NavItem>
@@ -58,12 +58,12 @@ export function NavItems() {
           <NavItem menu>
             <a href="#">Contact us</a>
           </NavItem>
-        </ListCotainer>
+        </ListContainer>
       </Menu>
     );
 
   return (
-    <ListCotainer>
+    <ListContainer>
       <NavItem>
         <a href="#">Home</a>
       </NavItem>
@@ -76,6 +76,6 @@ export function NavItems() {
       <NavItem>
         <a href="#">Contact us</a>
       </NavItem>
-    </ListCotainer>
+    </ListContainer>
   );
 }
