@@ -16,7 +16,7 @@ export interface GetCars_cars {
   gas: string;
   thumbnailURL: string;
   dailyPrice: number;
-  monthlyPrice: string;
+  monthlyPrice: number;
 }
 
 export interface GetCars {

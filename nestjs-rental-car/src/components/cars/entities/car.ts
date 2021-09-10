@@ -18,7 +18,7 @@ export class Car {
 
   @Column()
   @Field()
-  monthlyPrice: string;
+  monthlyPrice: number;
 
   @Column()
   @Field()

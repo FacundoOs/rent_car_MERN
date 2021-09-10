@@ -8,10 +8,12 @@ import "@brainhubeu/react-carousel/lib/style.css";
 import { useMediaQuery } from "react-responsive";
 import { SCREENS } from "../../components/respoonsive";
 import carService from "../../services/carService";
-import { GetCars } from "../../services/__generated__/GetCars";
+import { GetCars_cars } from "../../services/__generated__/GetCars";
 import { setTopCars } from "./slice";
 import { Dispatch } from "redux";
 import { useDispatch, useSelector } from "react-redux";
+import { createSelector } from "reselect";
+import { makeSelectTopCars } from "./selectors";
 
 const TopCarsContainer = styled.div`
   ${tw`
@@ -73,14 +75,19 @@ const LoadingContainer = styled.div`
 `;
 
 const actionDispatch = (dispatch: Dispatch) => ({
-  setTopCars: (cars: GetCars[]) => dispatch(setTopCars(cars)),
+  setTopCars: (cars: GetCars_cars[]) => dispatch(setTopCars(cars)),
 });
+
+const stateSelector = createSelector(makeSelectTopCars, (topCars) => ({
+  topCars,
+}));
 
 export function TopCars() {
   const [current, setCurrent] = useState(0);
 
   const isMobile = useMediaQuery({ maxWidth: SCREENS.sm });
 
+  const { topCars } = useSelector(stateSelector);
   const { setTopCars } = actionDispatch(useDispatch());
 
   const fetchTopCars = async () => {
@@ -118,58 +125,68 @@ export function TopCars() {
     fetchTopCars();
   }, []);
 
-  const cars = [
-    <Car {...testCar2} />,
-    <Car {...testCar} />,
-    <Car {...testCar2} />,
-    <Car {...testCar} />,
-    <Car {...testCar2} />,
-  ];
+  const isEmptyTopCars = !topCars || topCars.length === 0;
+
+  const cars =
+    (!isEmptyTopCars &&
+      topCars.map((car) => <Car {...car} thumbnailSrc={car.thumbnailURL} />)) ||
+    [];
+
+  // const cars = [
+  //   <Car {...testCar2} />,
+  //   <Car {...testCar} />,
+  //   <Car {...testCar2} />,
+  //   <Car {...testCar} />,
+  //   <Car {...testCar2} />,
+  // ];
 
   const numberOfDots = isMobile ? cars.length : Math.ceil(cars.length / 3);
 
   return (
     <TopCarsContainer>
       <Title>Explore Our Top Deals</Title>
-      <CarsContainer>
-        <Carousel
-          value={current}
-          onChange={setCurrent}
-          slides={cars}
-          plugins={[
-            "clickToChange",
-            {
-              resolve: slidesToShowPlugin,
-              options: {
-                numberOfSlides: 3,
+      {isEmptyTopCars && <EmptyCars>No Cars To Show!</EmptyCars>}
+      {!isEmptyTopCars && (
+        <CarsContainer>
+          <Carousel
+            value={current}
+            onChange={setCurrent}
+            slides={cars}
+            plugins={[
+              "clickToChange",
+              {
+                resolve: slidesToShowPlugin,
+                options: {
+                  numberOfSlides: 3,
+                },
               },
-            },
-          ]}
-          breakpoints={{
-            640: {
-              plugins: [
-                {
-                  resolve: slidesToShowPlugin,
-                  options: {
-                    numberOfSlides: 1,
+            ]}
+            breakpoints={{
+              640: {
+                plugins: [
+                  {
+                    resolve: slidesToShowPlugin,
+                    options: {
+                      numberOfSlides: 1,
+                    },
                   },
-                },
-              ],
-            },
-            900: {
-              plugins: [
-                {
-                  resolve: slidesToShowPlugin,
-                  options: {
-                    numberOfSlides: 2,
+                ],
+              },
+              900: {
+                plugins: [
+                  {
+                    resolve: slidesToShowPlugin,
+                    options: {
+                      numberOfSlides: 2,
+                    },
                   },
-                },
-              ],
-            },
-          }}
-        />
-        <Dots value={current} onChange={setCurrent} number={numberOfDots} />
-      </CarsContainer>
+                ],
+              },
+            }}
+          />
+          <Dots value={current} onChange={setCurrent} number={numberOfDots} />
+        </CarsContainer>
+      )}
     </TopCarsContainer>
   );
 }

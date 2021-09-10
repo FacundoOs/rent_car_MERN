@@ -1,5 +1,5 @@
-import { GetCars } from "../../services/__generated__/GetCars";
+import { GetCars_cars } from "../../services/__generated__/GetCars";
 
 export interface IHomePageState {
-  topCars: GetCars[];
+  topCars: GetCars_cars[];
 }
