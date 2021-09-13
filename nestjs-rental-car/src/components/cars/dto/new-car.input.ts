@@ -14,7 +14,7 @@ export class NewCarInput {
   @Field((type) => Int)
   @Max(20000)
   @Min(1500)
-  monthlyPrice: string;
+  monthlyPrice: number;
 
   @Field()
   mileage: string;
