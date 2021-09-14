@@ -1,4 +1,4 @@
-[
+module.exports = [
   {
     name: 'dev',
     type: 'mysql',
@@ -15,13 +15,13 @@
     },
   },
   {
-    name: 'prdo',
+    name: 'prod',
     type: 'mysql',
-    host: 'localhost',
+    host: 'mysqldb',
     port: 3306,
     username: 'root',
     password: 'pass123',
-    database: process.env.DB_NAME,
+    database: 'yourcar',
     entities: ['dist/**/entities/*{.ts,.js}'],
     synchronize: true,
     migrations: ['dist/migrations/*{.ts,.js}'],
